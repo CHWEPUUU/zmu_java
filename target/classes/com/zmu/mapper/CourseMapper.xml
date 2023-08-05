@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zmu.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.zmu.pojo.Course">
+    <id column="cno" jdbcType="CHAR" property="cno" />
+    <result column="cname" jdbcType="CHAR" property="cname" />
+    <result column="cpno" jdbcType="CHAR" property="cpno" />
+    <result column="ccredit" jdbcType="SMALLINT" property="ccredit" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cno, cname, cpno, ccredit
+  </sql>
+  <select id="selectByExample" parameterType="com.zmu.pojo.CourseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where cno = #{cno,jdbcType=CHAR}
+  </select>
+  <select id="getCnameByCpno" resultType="java.lang.String">
+    SELECT cname FROM course WHERE cno = #{cpno}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from course
+    where cno = #{cno,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zmu.pojo.CourseExample">
+    delete from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zmu.pojo.Course">
+    insert into course (cno, cname, cpno, ccredit
+      )
+    values (#{cno,jdbcType=CHAR}, #{cname,jdbcType=CHAR}, #{cpno,jdbcType=CHAR}, #{ccredit,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zmu.pojo.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cno != null">
+        cno,
+      </if>
+      <if test="cname != null">
+        cname,
+      </if>
+      <if test="cpno != null">
+        cpno,
+      </if>
+      <if test="ccredit != null">
+        ccredit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cno != null">
+        #{cno,jdbcType=CHAR},
+      </if>
+      <if test="cname != null">
+        #{cname,jdbcType=CHAR},
+      </if>
+      <if test="cpno != null">
+        #{cpno,jdbcType=CHAR},
+      </if>
+      <if test="ccredit != null">
+        #{ccredit,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zmu.pojo.CourseExample" resultType="java.lang.Long">
+    select count(*) from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update course
+    <set>
+      <if test="row.cno != null">
+        cno = #{row.cno,jdbcType=CHAR},
+      </if>
+      <if test="row.cname != null">
+        cname = #{row.cname,jdbcType=CHAR},
+      </if>
+      <if test="row.cpno != null">
+        cpno = #{row.cpno,jdbcType=CHAR},
+      </if>
+      <if test="row.ccredit != null">
+        ccredit = #{row.ccredit,jdbcType=SMALLINT},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update course
+    set cno = #{row.cno,jdbcType=CHAR},
+      cname = #{row.cname,jdbcType=CHAR},
+      cpno = #{row.cpno,jdbcType=CHAR},
+      ccredit = #{row.ccredit,jdbcType=SMALLINT}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zmu.pojo.Course">
+    update course
+    <set>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=CHAR},
+      </if>
+      <if test="cpno != null">
+        cpno = #{cpno,jdbcType=CHAR},
+      </if>
+      <if test="ccredit != null">
+        ccredit = #{ccredit,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where cno = #{cno,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zmu.pojo.Course">
+    update course
+    set cname = #{cname,jdbcType=CHAR},
+      cpno = #{cpno,jdbcType=CHAR},
+      ccredit = #{ccredit,jdbcType=SMALLINT}
+    where cno = #{cno,jdbcType=CHAR}
+  </update>
+</mapper>
